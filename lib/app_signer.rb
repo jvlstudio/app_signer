@@ -102,9 +102,35 @@ module AppSigner
       return r
     end
 
+    # Raises an exception if attributes needed for signing aren't set
+    def validate_attributes
+      if self.app_path.nil?
+        raise 'app_path required to sign'
+      end
+
+      if self.provisioning_profile_path.nil?
+        raise 'provisioning_profile_path required to sign'
+      end
+
+      if self.signing_identity.nil?
+        raise 'signing_identity required to sign'
+      end
+
+      if self.signing_identity_SHA1.nil?
+        raise 'signing_identity_SHA1 required to sign'
+      end
+
+      if self.generated_ipa_name.nil?
+        raise 'generated_ipa_name required to sign'
+      end
+    end
+
     # Creates an ipa by using the signing information given in the set
     # attributes
     def sign
+
+      validate_attributes
+
       # Parse profile
       r = parse_provisioning_proflie(self.provisioning_profile_path)
 

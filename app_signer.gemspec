@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.description = 'Sign an iOS .app package with a given provisioning profile.'
   s.authors = ['Andrew Carter', 'WillowTree Apps']
   s.email = ['andrew.carter@willowtreeapps.com']
-  s.files = ['lib/app_signer.rb']
+  s.files = ['lib/app_signer.rb', 'README.md']
   s.homepage = 'http://rubygems.org/gems/app-sign'
   s.license = 'MIT'
   s.executables << 'app_signer'
