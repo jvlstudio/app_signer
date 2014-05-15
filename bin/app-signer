@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+require 'app-signer'
+require 'fileutils'
+require 'pathname'
+require 'trollop'
+
+opts = Trollop::options do
+  opt :app_path, "Path to .app file", :type => :string, :required => true
+  opt :profile_path, "Path to provisioning profile", :type => :string, :required => true
+  opt :signing_identity, "Signing Identity", :type => :string, :required => true
+  opt :signing_identity_SHA1, "SHA1 of Signing Identity", :type => :string, :required => true
+  opt :ipa_name, "Name of signed IPA", :type => :string, :required => true
+  opt :bundle_id, "bundle id to be used in signed IPA", :type => :string
+end
+
+signer = AppSigner::Signer.new
+signer.app_path = opts[:app_path]
+signer.provisioning_profile_path = opts[:profile_path]
+signer.signing_identity = opts[:signing_identity]
+signer.signing_identity_SHA1 = opts[:signing_identity_SHA1]
+signer.generated_ipa_name = opts[:ipa_name]
+signer.bundle_id = opts[:bundle_id]
+
+signer.sign
