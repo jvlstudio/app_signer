@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'app-signer'
+require 'app_signer'
 require 'fileutils'
 require 'pathname'
 require 'trollop'
