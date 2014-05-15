@@ -1,16 +1,16 @@
 require 'plist'
 require 'openssl'
 
-# AppSigner is an easy way to resign iOS apps. This module contains only one
+# AppSigner is an easy way to re-sign iOS apps. This module contains only one
 # class {AppSigner::Signer} which contains all functionality.
 module AppSigner
 
-  # Used to resign iOS .app files. Generates a .ipa based upon the set
+  # Used to re-sign iOS .app files. Generates a .ipa based upon the set
   # attributes when calling {AppSigner::Signer#sign}
   class Signer
 
     # @!attribute app_path
-    #   @return [String] path to the .app file to be resigned
+    #   @return [String] path to the .app file to be re-signed
     attr_accessor :app_path
 
     # @!attribute provisioning_profile_path
@@ -22,7 +22,7 @@ module AppSigner
     attr_accessor :signing_identity
 
     # @!attribute bundle_id
-    #   @return [String] bundle id to set in the resigned ipa's info plist
+    #   @return [String] bundle id to set in the re-signed ipa's info plist
     attr_accessor :bundle_id
 
     # @!attribute signing_identity_SHA1
@@ -102,9 +102,35 @@ module AppSigner
       return r
     end
 
+    # Raises an exception if attributes needed for signing aren't set
+    def validate_attributes
+      if self.app_path.nil?
+        raise 'app_path required to sign'
+      end
+
+      if self.provisioning_profile_path.nil?
+        raise 'provisioning_profile_path required to sign'
+      end
+
+      if self.signing_identity.nil?
+        raise 'signing_identity required to sign'
+      end
+
+      if self.signing_identity_SHA1.nil?
+        raise 'signing_identity_SHA1 required to sign'
+      end
+
+      if self.generated_ipa_name.nil?
+        raise 'generated_ipa_name required to sign'
+      end
+    end
+
     # Creates an ipa by using the signing information given in the set
     # attributes
     def sign
+
+      validate_attributes
+
       # Parse profile
       r = parse_provisioning_proflie(self.provisioning_profile_path)
 
@@ -137,7 +163,7 @@ module AppSigner
       end
       puts 'Certificate Valid'
 
-      # Resign application using correct profile and entitlements
+      # Re-sign application using correct profile and entitlements
       $stderr.puts "running /usr/bin/codesign -f -s \"#{self.signing_identity}\" --resource-rules=\"#{app_path}/ResourceRules.plist\" \"#{app_path}\""
       result=system("/usr/bin/codesign -f -s \"#{self.signing_identity_SHA1}\" --resource-rules=\"#{app_path}/ResourceRules.plist\" --entitlements=\"#{app_path}/Entitlements.plist\" \"#{app_path}\"")
 
