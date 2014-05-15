@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.authors = ['Andrew Carter', 'WillowTree Apps']
   s.email = ['andrew.carter@willowtreeapps.com', 'andrew.carter@gmail.com']
   s.files = ['lib/app_signer.rb', 'README.md']
-  s.homepage = 'http://rubygems.org/gems/app-sign'
+  s.homepage = 'https://github.com/willowtreeapps/app_signer'
   s.license = 'MIT'
   s.executables << 'app_signer'
   s.has_rdoc = 'yard'
